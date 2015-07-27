@@ -30,7 +30,7 @@ LutronHWPlatform.prototype = {
             }
         }
 
-        lutron.open(this.connection, function() {callback(foundAccessories)});
+        lutron.init(this.connection, function() {callback(foundAccessories)});
     }
 };
 
