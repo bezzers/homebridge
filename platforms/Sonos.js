@@ -1,37 +1,76 @@
 var types = require("HAP-NodeJS/accessories/types.js");
-var tesla = require("teslams");
+var sonos = require('sonos');
 
-function TeslaAccessory(log, config) {
+function SonosPlatform(log, config){
     this.log = log;
+    this.config = config;
     this.name = config["name"];
-    this.username = config["username"];
-    this.password = config["password"];
+    this.playVolume = config["play_volume"];
 }
 
-TeslaAccessory.prototype = {
+SonosPlatform.prototype = {
+    accessories: function(callback) {
+        this.log("Fetching Sonos devices.");
+        var that = this;
+        
+        sonos.search(function (device) {
+            that.log("Found device at " + device.host);
 
-    setPowerState: function(powerOn) {
+            device.deviceDescription(function (err, description) {
+                if (description["zoneType"] != '11') {
+                    that.log("Found playable device - " + description["roomName"]);
+                    // device is an instance of sonos.Sonos
+                    var accessory = new SonosAccessory(that.log, that.config, device, description);
+                    callback([accessory]);
+                }
+            });
+        });
+    }
+};
+
+function SonosAccessory(log, config, device, description) {
+    this.log = log;
+    this.config = config;
+    this.device = device;
+    this.description = description;
+    
+    this.name = this.description["roomName"] + " " + this.config["name"];
+    this.serviceName = this.description["roomName"] + " Speakers";
+    this.playVolume = this.config["play_volume"];
+}
+
+SonosAccessory.prototype = {
+
+    setPlaying: function(playing) {
+
+        if (!this.device) {
+            this.log("No device found (yet?)");
+            return;
+        }
+
         var that = this;
 
-        tesla.get_vid({email: this.username, password: this.password}, function(vehicle) {
+        if (playing) {
+            this.device.play(function(err, success) {
+                that.log("Playback attempt with success: " + success);
+            });
 
-            if (powerOn) {
-                tesla.auto_conditioning({id:vehicle, climate: 'start'}, function(response) {
-                    if (response.result)
-                        that.log("Started climate control.");
-                    else
-                        that.log("Error starting climate control: " + response.reason);
+            if (this.playVolume) {
+                this.device.setVolume(this.playVolume, function(err, success) {
+                    if (!err) {
+                        that.log("Set volume to " + that.playVolume);
+                    }
+                    else {
+                        that.log("Problem setting volume: " + err);
+                    }
                 });
             }
-            else {
-                tesla.auto_conditioning({id:vehicle, climate: 'stop'}, function(response) {
-                    if (response.result)
-                        that.log("Stopped climate control.");
-                    else
-                        that.log("Error stopping climate control: " + response.reason);
-                });
-            }
-        })
+        }
+        else {
+            this.device.stop(function(err, success) {
+                that.log("Stop attempt with success: " + success);
+            });
+        }
     },
 
     getServices: function() {
@@ -53,7 +92,7 @@ TeslaAccessory.prototype = {
                 onUpdate: null,
                 perms: ["pr"],
                 format: "string",
-                initialValue: "Tesla",
+                initialValue: "Sonos",
                 supportEvents: false,
                 supportBonjour: false,
                 manfDescription: "Manufacturer",
@@ -96,24 +135,25 @@ TeslaAccessory.prototype = {
                 onUpdate: null,
                 perms: ["pr"],
                 format: "string",
-                initialValue: this.name,
+                initialValue: this.serviceName,
                 supportEvents: false,
                 supportBonjour: false,
                 manfDescription: "Name of service",
                 designedMaxLength: 255
             },{
                 cType: types.POWER_STATE_CTYPE,
-                onUpdate: function(value) { that.setPowerState(value); },
+                onUpdate: function(value) { that.setPlaying(value); },
                 perms: ["pw","pr","ev"],
                 format: "bool",
                 initialValue: false,
                 supportEvents: false,
                 supportBonjour: false,
-                manfDescription: "Change the power state of the car",
+                manfDescription: "Change the playback state of the sonos",
                 designedMaxLength: 1
             }]
         }];
     }
 };
 
-module.exports.accessory = TeslaAccessory;
+module.exports.accessory = SonosAccessory;
+module.exports.platform = SonosPlatform;

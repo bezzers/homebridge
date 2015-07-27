@@ -1,10 +1,5 @@
 var types = require("HAP-NodeJS/accessories/types.js");
-var lutron = require("lutron");
-
-var model = {
-    light_bulbs: require('wink-js/lib/model/light')
-};
-
+var lutron = require("lutronhw/lutronHW.js");
 
 function LutronHWPlatform(log, config){
 
@@ -35,7 +30,7 @@ LutronHWPlatform.prototype = {
             }
         }
 
-        lutron.open(this.connection, callback(foundAccessories));
+        lutron.open(this.connection, function() {callback(foundAccessories)});
     }
 };
 
@@ -223,5 +218,3 @@ LutronHWAccessory.prototype = {
 
 module.exports.accessory = LutronHWAccessory;
 module.exports.platform = LutronHWPlatform;
-
-
