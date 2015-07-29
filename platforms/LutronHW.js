@@ -164,7 +164,7 @@ LutronHWAccessory.prototype = {
                 designedMaxLength: 1
             }]
         },{
-            sType: (this.device.type == 'Light') ? types.LIGHTBULB_STYPE : types.WINDOW_COVERING_STYPE,
+            sType: types.LIGHTBULB_STYPE,
             characteristics: [{
                 cType: types.NAME_CTYPE,
                 onUpdate: null,
@@ -176,7 +176,7 @@ LutronHWAccessory.prototype = {
                 manfDescription: "Name of service",
                 designedMaxLength: 255
             },{
-                cType: (this.device.type == 'Light') ? types.POWER_STATE_CTYPE : types.WINDOW_COVERING_OPERATION_STATE_CTYPE,
+                cType: types.POWER_STATE_CTYPE,
                 onUpdate: function(value) {
                     that.setPowerState(value);
                 },
@@ -193,7 +193,7 @@ LutronHWAccessory.prototype = {
                 manfDescription: "Change the power state of the Bulb/Shade",
                 designedMaxLength: 1
             },{
-                cType: (this.device.type == 'Light') ? types.BRIGHTNESS_CTYPE : types.WINDOW_COVERING_TARGET_POSITION_CTYPE,
+                cType: types.BRIGHTNESS_CTYPE,
                 onUpdate: function(value) {
                     that.setBrightness(value);
                 },
