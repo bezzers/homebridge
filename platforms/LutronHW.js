@@ -30,7 +30,7 @@ LutronHWPlatform.prototype = {
             }
         }
 
-        lutron.open(this.connection, function() {callback(foundAccessories)});
+        lutron.init(this.connection, function() {callback(foundAccessories)});
     }
 };
 
@@ -72,7 +72,7 @@ LutronHWAccessory.prototype = {
 
     setPowerState: function(powerOn) {
         var that = this;
-
+/*
         if (powerOn) {
             this.log("Setting power state for: " + this.name + " to on");
             lutron.setLight(this.device.code, this.device.max || 100, function(err, result) {
@@ -92,17 +92,18 @@ LutronHWAccessory.prototype = {
                 }
             })
         }
+*/
     },
 
     setBrightness: function(level) {
         var that = this;
 
-        this.log("Setting brightness for: " + this.name + " to " + level);
-        lutron.setLight(this.device.code, level, function(err, result) {
+        this.log("Setting brightness for: " + this.name + " to " + this.device.max ||  level);
+        lutron.setLight(this.device.code, this.device.max ||  level, function(err, result) {
             if (result == null) {
                 that.log("Error setting brightness for " + that.name);
             } else {
-                that.log("Successfully set brightness for " + that.name + " to " + level)
+                that.log("Successfully set brightness for " + that.name + " to " + that.device.max ||  level)
             }
         })
     },
@@ -163,7 +164,7 @@ LutronHWAccessory.prototype = {
                 designedMaxLength: 1
             }]
         },{
-            sType: types.LIGHTBULB_STYPE,
+            sType: (this.device.type == 'Light') ? types.LIGHTBULB_STYPE : types.WINDOW_COVERING_STYPE,
             characteristics: [{
                 cType: types.NAME_CTYPE,
                 onUpdate: null,
@@ -175,7 +176,7 @@ LutronHWAccessory.prototype = {
                 manfDescription: "Name of service",
                 designedMaxLength: 255
             },{
-                cType: types.POWER_STATE_CTYPE,
+                cType: (this.device.type == 'Light') ? types.POWER_STATE_CTYPE : types.WINDOW_COVERING_OPERATION_STATE_CTYPE,
                 onUpdate: function(value) {
                     that.setPowerState(value);
                 },
@@ -189,10 +190,10 @@ LutronHWAccessory.prototype = {
                 initialValue: 0,
                 supportEvents: true,
                 supportBonjour: false,
-                manfDescription: "Change the power state of the Bulb",
+                manfDescription: "Change the power state of the Bulb/Shade",
                 designedMaxLength: 1
             },{
-                cType: types.BRIGHTNESS_CTYPE,
+                cType: (this.device.type == 'Light') ? types.BRIGHTNESS_CTYPE : types.WINDOW_COVERING_TARGET_POSITION_CTYPE,
                 onUpdate: function(value) {
                     that.setBrightness(value);
                 },
@@ -206,7 +207,7 @@ LutronHWAccessory.prototype = {
                 initialValue:  0,
                 supportEvents: true,
                 supportBonjour: false,
-                manfDescription: "Adjust Brightness of Light",
+                manfDescription: "Adjust Brightness of Light/Shade",
                 designedMinValue: 0,
                 designedMaxValue: 100,
                 designedMinStep: 1,
