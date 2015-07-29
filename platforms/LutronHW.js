@@ -72,10 +72,10 @@ LutronHWAccessory.prototype = {
 
     setPowerState: function(powerOn) {
         var that = this;
-/*
+
         if (powerOn) {
             this.log("Setting power state for: " + this.name + " to on");
-            lutron.setLight(this.device.code, this.device.max || 100, function(err, result) {
+            lutron.setLight(this.device.code, this.device.maxLevel || 100, function(err, result) {
                 if (result == null) {
                     that.log("Error setting power state for " + that.name);
                 } else {
@@ -92,13 +92,13 @@ LutronHWAccessory.prototype = {
                 }
             })
         }
-*/
+
     },
 
     setBrightness: function(level) {
         var that = this;
 
-        this.log("Setting brightness for: " + this.name + " to " + this.device.maxLevel |  level);
+        this.log("Setting brightness for: " + this.name + " to " + this.device.maxLevel ||  level);
         lutron.setLight(this.device.code, this.device.maxLevel ||  level, function(err, result) {
             if (result == null) {
                 that.log("Error setting brightness for " + that.name);
