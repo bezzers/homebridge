@@ -98,12 +98,12 @@ LutronHWAccessory.prototype = {
     setBrightness: function(level) {
         var that = this;
 
-        this.log("Setting brightness for: " + this.name + " to " + this.device.max ||  level);
-        lutron.setLight(this.device.code, this.device.max ||  level, function(err, result) {
+        this.log("Setting brightness for: " + this.name + " to " + this.device.maxLevel |  level);
+        lutron.setLight(this.device.code, this.device.maxLevel ||  level, function(err, result) {
             if (result == null) {
                 that.log("Error setting brightness for " + that.name);
             } else {
-                that.log("Successfully set brightness for " + that.name + " to " + that.device.max ||  level)
+                that.log("Successfully set brightness for " + that.name + " to " + that.device.maxLevel ||  level)
             }
         })
     },
