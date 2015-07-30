@@ -39,6 +39,8 @@ function LutronHWAccessory(log, room, device) {
     this.name = room + " " + device.location + " " + device.type;
     this.device = device;
     this.log = log;
+    this.powerState = 'Off';
+    this.brightness = 0;
 }
 
 LutronHWAccessory.prototype = {
@@ -92,18 +94,17 @@ LutronHWAccessory.prototype = {
                 }
             })
         }
-
     },
 
     setBrightness: function(level) {
         var that = this;
 
         this.log("Setting brightness for: " + this.name + " to " + (this.device.maxLevel ||  level));
-        lutron.setLight(this.device.code, this.device.maxLevel ||  level, function(err, result) {
+        lutron.setLight(this.device.code, ((this.device.maxLevel) ? Math.min(this.device.maxLevel, level) : level), function(err, result) {
             if (result == null) {
                 that.log("Error setting brightness for " + that.name);
             } else {
-                that.log("Successfully set brightness for " + that.name + " to " + (that.device.maxLevel ||  level))
+                that.log("Successfully set brightness for " + that.name + " to " + ((that.device.maxLevel) ? Math.min(that.device.maxLevel, level) : level))
             }
         })
     },
