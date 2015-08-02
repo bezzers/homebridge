@@ -69,7 +69,7 @@ LutronHWAccessory.prototype = {
         if (powerOn) {
             this.log("Setting power state for: " + this.name + " to on");
             this.getBrightness(function(brightness) {
-                targetBrightness = this.device.maxLevel || 100;
+                targetBrightness = that.device.maxLevel || 100;
             })
         } else {
             this.log("Setting power state for: " + this.name + " to off");
