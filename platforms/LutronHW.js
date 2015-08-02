@@ -64,6 +64,7 @@ LutronHWAccessory.prototype = {
     },
 
     setPowerState: function(powerOn) {
+        var that = this;
         var targetBrightness;
 
         if (powerOn) {
