@@ -80,7 +80,7 @@ LutronHWAccessory.prototype = {
 
     setBrightness: function(level) {
         var that = this;
-        var targetBrightness = ((this.device.maxLevel) ? Math.min(this.device.maxLevel, level) : level);
+        var targetBrightness = (this.device.maxLevel) ? Math.min(this.device.maxLevel, level) : level;
 
         this.log("Setting brightness for: " + this.name + " to " + targetBrightness);
         lutron.setLight(this.device.code, targetBrightness, function(err, result) {
