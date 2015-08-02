@@ -44,8 +44,8 @@ function LutronHWAccessory(log, room, device) {
 LutronHWAccessory.prototype = {
     getPowerState: function(callback){
         var that = this;
-        this.getBrightness(function(result) {
-            callback(result!=0)
+        this.getBrightness(function(brightness) {
+            callback(brightness!=0)
         })
     },
 
@@ -55,8 +55,8 @@ LutronHWAccessory.prototype = {
         this.log("Checking brightness for: " + this.name);
         lutron.getLight(this.device.code, function(err, result) {
             if (!err) {
-                that.log("Brightness  for " + that.name + " is: " + result);
-                callback(result);
+                that.log("Brightness  for " + that.name + " is: " + result.brightness);
+                callback(result.brightness);
             } else {
                 that.log("Brightness for " + that.name + " can't be retrieved: " + err);
             }
@@ -68,8 +68,8 @@ LutronHWAccessory.prototype = {
 
         if (powerOn) {
             this.log("Setting power state for: " + this.name + " to on");
-            this.getBrightness(function(result) {
-                targetBrightness = result;
+            this.getBrightness(function(brightness) {
+                targetBrightness = brightness;
             })
         } else {
             this.log("Setting power state for: " + this.name + " to off");
