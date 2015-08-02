@@ -39,23 +39,14 @@ function LutronHWAccessory(log, room, device) {
     this.name = room + " " + device.location + " " + device.type;
     this.device = device;
     this.log = log;
-    this.powerState = 'Off';
-    this.brightness = 0;
 }
 
 LutronHWAccessory.prototype = {
     getPowerState: function(callback){
         var that = this;
-
-        this.log("Checking power state for: " + this.name);
-        lutron.getLight(this.device.code, function(err, result) {
-            if (result == null) {
-                that.log("Power state for " + that.name + " can't be retrieved: " + err);
-            } else {
-                that.log("Power state for " + that.name + " is: " + (result != 0));
-                callback((result != 0));
-            }
-        });
+        this.getBrightness(function(result) {
+            callback(result!=0)
+        })
     },
 
     getBrightness: function(callback){
@@ -63,48 +54,40 @@ LutronHWAccessory.prototype = {
 
         this.log("Checking brightness for: " + this.name);
         lutron.getLight(this.device.code, function(err, result) {
-            if (result == null) {
-                that.log("Brightness for " + that.name + " can't be retrieved: " + err);
-            } else {
+            if (!err) {
                 that.log("Brightness  for " + that.name + " is: " + result);
                 callback(result);
+            } else {
+                that.log("Brightness for " + that.name + " can't be retrieved: " + err);
             }
         });
     },
 
     setPowerState: function(powerOn) {
-        var that = this;
+        var targetBrightness;
 
         if (powerOn) {
             this.log("Setting power state for: " + this.name + " to on");
-            lutron.setLight(this.device.code, this.device.maxLevel || 100, function(err, result) {
-                if (result == null) {
-                    that.log("Error setting power state for " + that.name);
-                } else {
-                    that.log("Successfully set power state for " + that.name + " to on")
-                }
+            this.getBrightness(function(result) {
+                targetBrightness = result;
             })
         } else {
             this.log("Setting power state for: " + this.name + " to off");
-            lutron.setLight(this.device.code, 0, function (err, result) {
-                if (result == null) {
-                    that.log("Error setting power state for " + that.name);
-                } else {
-                    that.log("Successfully set power state for " + that.name + " to off")
-                }
-            })
+            targetBrightness = 0;
         }
+        this.setBrightness(targetBrightness);
     },
 
     setBrightness: function(level) {
         var that = this;
+        var targetBrightness = ((this.device.maxLevel) ? Math.min(this.device.maxLevel, level) : level);
 
-        this.log("Setting brightness for: " + this.name + " to " + (this.device.maxLevel ||  level));
-        lutron.setLight(this.device.code, ((this.device.maxLevel) ? Math.min(this.device.maxLevel, level) : level), function(err, result) {
-            if (result == null) {
-                that.log("Error setting brightness for " + that.name);
+        this.log("Setting brightness for: " + this.name + " to " + targetBrightness);
+        lutron.setLight(this.device.code, targetBrightness, function(err, result) {
+            if (!err) {
+                that.log("Successfully set brightness for " + that.name + " to " + targetBrightness);
             } else {
-                that.log("Successfully set brightness for " + that.name + " to " + ((that.device.maxLevel) ? Math.min(that.device.maxLevel, level) : level))
+                that.log("Error setting brightness for " + that.name);
             }
         })
     },
@@ -191,7 +174,7 @@ LutronHWAccessory.prototype = {
                 initialValue: 0,
                 supportEvents: true,
                 supportBonjour: false,
-                manfDescription: "Change the power state of the Bulb/Shade",
+                manfDescription: "Change the power state of the Bulb",
                 designedMaxLength: 1
             },{
                 cType: types.BRIGHTNESS_CTYPE,
@@ -208,7 +191,7 @@ LutronHWAccessory.prototype = {
                 initialValue:  0,
                 supportEvents: true,
                 supportBonjour: false,
-                manfDescription: "Adjust Brightness of Light/Shade",
+                manfDescription: "Adjust Brightness of Light",
                 designedMinValue: 0,
                 designedMaxValue: 100,
                 designedMinStep: 1,
