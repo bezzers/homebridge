@@ -1,0 +1,24 @@
+{
+    "chart_name": "simple-web-app",
+    "chart_version": "1.0.7",
+    "deployment_name": "mgti-ocio-dev-owg-sfmc-connector",
+    "values": {
+        "resources": {
+            "deployment": {
+                "replicaCount": 1
+            }
+        },
+        "image": {
+            "reg": "prod-images.mgti-dal-so-art.mrshmc.com",
+            "repo": "owgsfmcconnector",
+            "tag": "0.0.9"
+        },
+        "networking": {
+            "containerPort": 8080,
+            "hostname": "owg-sfmc-connector.mrshmc.com"
+        },
+        "env": {
+            "VAULT_TOKEN": "s.DQJyMu1yXw00EwG4vFuLSVxj"
+        }
+    }
+}
