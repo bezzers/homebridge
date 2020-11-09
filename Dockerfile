@@ -8,4 +8,4 @@ RUN cd /opt/app-root/src && pip3 install --no-cache-dir -r requirements.txt
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 WORKDIR /opt/app-root/src
-CMD uvicorn api:app --port=8080 --host 0.0.0.0
+CMD python3 main.py

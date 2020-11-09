@@ -11,11 +11,7 @@
         "image": {
             "reg": "prod-images.mgti-dal-so-art.mrshmc.com",
             "repo": "owgsfmcconnector",
-            "tag": "0.0.9"
-        },
-        "networking": {
-            "containerPort": 8080,
-            "hostname": "owg-sfmc-connector.mrshmc.com"
+            "tag": "0.0.1.cron"
         },
         "env": {
             "VAULT_TOKEN": "s.DQJyMu1yXw00EwG4vFuLSVxj"

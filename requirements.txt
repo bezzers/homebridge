@@ -4,7 +4,4 @@ pandas
 pyarrow
 xmltodict
 azure.storage.blob
-fastapi
-uvicorn
-pydantic
-typing
+s3fs

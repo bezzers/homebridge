@@ -81,7 +81,7 @@ class SFMC:
         return monday.strftime('%Y-%m-%d'), sunday.strftime('%Y-%m-%d')
         
     # Runs the queries for one week and amalgamates the results
-    async def run_week(self, id, azb, offset=0):
+    async def run_week(self, id, offset=0):
         start_date, end_date = self.get_filter_dates(datetime.datetime.today(), offset)
 
         # Runs each event type in parallel
@@ -95,5 +95,4 @@ class SFMC:
         all_results = list()
         for r in res:
             all_results.extend(r)
-        pd.DataFrame(all_results)[['EventType', 'SendID', 'SubscriberKey', 'EventDate']].to_parquet(str(id))
-        azb.write(str(id), 'events-' + start_date, 'owg-sfmc')
+        return 'events-' + start_date, pd.DataFrame(all_results)[['EventType', 'SendID', 'SubscriberKey', 'EventDate']]
