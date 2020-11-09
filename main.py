@@ -12,6 +12,7 @@ secrets = response.json()['data']['data']
 id = uuid.uuid4()
 sfmc = SFMC(secrets['sfmc_org_id'], secrets['sfmc_client_id'], secrets['sfmc_client_secret'])
 store = BLOB(secrets['connection_string'], secrets['container_name'])
-blob_name, df = sfmc.run_week(id, 0)
+loop = asyncio.get_event_loop()
+blob_name, df = loop.run_until_complete(sfmc.run_week(id, 0))
 store.write(df, blob_name)
 print('Successful run', id)

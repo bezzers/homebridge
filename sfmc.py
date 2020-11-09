@@ -70,6 +70,7 @@ class SFMC:
             request_id = res['RequestID']
             status = res['OverallStatus']
             data = res['Results']
+            print('Fetched', object_type, start_date)
             all_results.extend(data)
         return all_results
 

@@ -3,5 +3,4 @@ asyncio
 pandas
 pyarrow
 xmltodict
-azure.storage.blob
 s3fs
