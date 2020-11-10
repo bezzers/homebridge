@@ -1,13 +1,8 @@
 {
-    "chart_name": "simple-web-app",
-    "chart_version": "1.0.7",
+    "chart_name": "simple-cronjob",
+    "chart_version": "0.0.1-798",
     "deployment_name": "mgti-ocio-dev-owg-sfmc-connector",
     "values": {
-        "resources": {
-            "deployment": {
-                "replicaCount": 1
-            }
-        },
         "image": {
             "reg": "prod-images.mgti-dal-so-art.mrshmc.com",
             "repo": "owgsfmcconnector",
@@ -15,6 +10,19 @@
         },
         "env": {
             "VAULT_TOKEN": "s.DQJyMu1yXw00EwG4vFuLSVxj"
+        },
+        "jobspec": {
+            "schedule": "30 4 * * 1"
+        },
+        "resources": {
+            "requests": {
+                "cpu": 0.5,
+                "memory": "128Mi"
+            },
+            "limits": {
+                "cpu": 1,
+                "memory": "1Gi"
+            }
         }
     }
 }
