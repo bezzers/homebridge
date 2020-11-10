@@ -14,5 +14,6 @@ sfmc = SFMC(secrets['sfmc_org_id'], secrets['sfmc_client_id'], secrets['sfmc_cli
 store = BLOB(secrets['connection_string'], secrets['container_name'])
 loop = asyncio.get_event_loop()
 blob_name, df = loop.run_until_complete(sfmc.run_week(id, 0))
+print('Writing results', id)
 store.write(df, blob_name)
 print('Successful run', id)

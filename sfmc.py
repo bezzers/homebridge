@@ -58,8 +58,7 @@ class SFMC:
         return response
 
     # Fetches all of the results for a particular set of filters by making repeated requests
-    async def fetch_all_results(self, object_type, start_date, end_date):
-        all_results = list()
+    async def fetch_all_results(self, object_type, start_date, end_date, df):
         request_id, status = "", None
         while status != 'OK':
             response = await self.make_soap_request(object_type, start_date, end_date, request_id)
@@ -70,9 +69,9 @@ class SFMC:
             request_id = res['RequestID']
             status = res['OverallStatus']
             data = res['Results']
-            print('Fetched', object_type, start_date)
-            all_results.extend(data)
-        return all_results
+            df = df.append(data)
+            print('Fetched', object_type, start_date, len(df), id)
+        return df[['EventType', 'SendID', 'SubscriberKey', 'EventDate']]
 
     # Returns the dates for the Monday and Sunday of the week [offset] weeks back from today
     def get_filter_dates(self, date, offset=0):
@@ -87,13 +86,14 @@ class SFMC:
 
         # Runs each event type in parallel
         def fetch(event):
-            return self.fetch_all_results(event, start_date, end_date)
+            return self.fetch_all_results(event, start_date, end_date, pd.DataFrame())
         events = ['SentEvent', 'OpenEvent', 'ClickEvent', 'BounceEvent', 'UnsubEvent']
         reqs = list(map(fetch, events))
         res = await asyncio.gather(*reqs)
+        df = pd.DataFrame()
+        for d in res:
+            df = df.append(d)
+            d = None
 
         # Group and write to a parquet file
-        all_results = list()
-        for r in res:
-            all_results.extend(r)
-        return 'events-' + start_date, pd.DataFrame(all_results)[['EventType', 'SendID', 'SubscriberKey', 'EventDate']]
+        return 'events-' + start_date, df
