@@ -1,7 +1,7 @@
 {
     "chart_name": "simple-cronjob",
     "chart_version": "0.0.1-798",
-    "deployment_name": "mgti-ocio-dev-owg-sfmc-connector",
+    "deployment_name": "mgti-ocio-dev5-owg-sfmc-connector",
     "values": {
         "image": {
             "reg": "prod-images.mgti-dal-so-art.mrshmc.com",
