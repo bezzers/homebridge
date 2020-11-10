@@ -70,7 +70,7 @@ class SFMC:
             status = res['OverallStatus']
             data = res['Results']
             df = df.append(data)
-            print('Fetched', object_type, start_date, len(df), id)
+            print('Fetched', object_type, start_date, len(df), str(id))
         return df[['EventType', 'SendID', 'SubscriberKey', 'EventDate']]
 
     # Returns the dates for the Monday and Sunday of the week [offset] weeks back from today
@@ -96,4 +96,4 @@ class SFMC:
             d = None
 
         # Group and write to a parquet file
-        return 'events-' + start_date, df
+        return 'events-' + start_date, df[['EventType', 'SendID', 'SubscriberKey', 'EventDate']]
