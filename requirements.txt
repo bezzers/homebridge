@@ -4,3 +4,5 @@ pandas
 pyarrow
 xmltodict
 s3fs
+camunda-external-task-client-python3
+frozendict
