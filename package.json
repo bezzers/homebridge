@@ -21,7 +21,7 @@
     "node-milight-promise": "0.0.2",
     "node-persist": "0.0.x",
     "request": "2.49.x",
-    "sonos": "0.8.x",
+    "sonos": "1.0.0",
     "telldus-live": "0.2.x",
     "unofficial-nest-api": "git+https://github.com/hachidorii/unofficial_nodejs_nest.git#d8d48edc952b049ff6320ef99afa7b2f04cdee98",
     "wemo": "0.2.x",
