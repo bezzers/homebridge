@@ -3,7 +3,9 @@
   "description": "HomeKit support for the impatient",
   "version": "0.0.0",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -29,6 +31,8 @@
     "xml2js": "0.4.x",
     "xmldoc": "0.1.x",
     "teslams": "1.0.1",
-    "lutronhw": "git+https://github.com/bezzers/LutronHW"
-  }
+    "lutronhw": "git+https://github.com/bezzers/LutronHW",
+    "snyk": "^1.526.0"
+  },
+  "snyk": true
 }
