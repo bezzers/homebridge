@@ -26,7 +26,7 @@
     "unofficial-nest-api": "git+https://github.com/hachidorii/unofficial_nodejs_nest.git#d8d48edc952b049ff6320ef99afa7b2f04cdee98",
     "wemo": "0.2.x",
     "wink-js": "0.0.5",
-    "xml2js": "0.4.x",
+    "xml2js": "0.5.0",
     "xmldoc": "0.1.x",
     "teslams": "1.0.1",
     "lutronhw": "git+https://github.com/bezzers/LutronHW"
