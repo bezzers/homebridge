@@ -3,7 +3,9 @@
   "description": "HomeKit support for the impatient",
   "version": "0.0.0",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "prepublish": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -20,8 +22,8 @@
     "node-hue-api": "^1.0.5",
     "node-milight-promise": "0.0.2",
     "node-persist": "0.0.x",
-    "request": "2.49.x",
-    "sonos": "0.8.x",
+    "request": "2.68.0",
+    "sonos": "0.13.0",
     "telldus-live": "0.2.x",
     "unofficial-nest-api": "git+https://github.com/hachidorii/unofficial_nodejs_nest.git#d8d48edc952b049ff6320ef99afa7b2f04cdee98",
     "wemo": "0.2.x",
@@ -29,6 +31,8 @@
     "xml2js": "0.4.x",
     "xmldoc": "0.1.x",
     "teslams": "1.0.1",
-    "lutronhw": "git+https://github.com/bezzers/LutronHW"
-  }
+    "lutronhw": "git+https://github.com/bezzers/LutronHW",
+    "@snyk/protect": "latest"
+  },
+  "snyk": true
 }
